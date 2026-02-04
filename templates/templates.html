@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="templates-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>תבניות בעיות</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTemplateModal">
+            <i class="fas fa-plus"></i> תבנית חדשה
+        </button>
+    </div>
+
+    <div class="row">
+        {% for template in templates %}
+        <div class="col-md-4 mb-4">
+            <div class="card template-card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ template.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <i class="fas fa-folder"></i> {{ template.category }}
+                    </h6>
+                    <p class="card-text">{{ template.description }}</p>
+
+                    {% if template.subtasks %}
+                    <div class="template-subtasks mb-3">
+                        <strong>משימות משנה:</strong>
+                        <ul class="list-unstyled">
+                            {% for subtask in template.subtasks %}
+                            <li><i class="fas fa-check-square"></i> {{ subtask.title }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    {% if template.tags %}
+                    <div class="template-tags">
+                        {% for tag in template.tags %}
+                        <span class="badge bg-info me-1">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('create_from_template', template_id=template.id) }}"
+                        class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-plus"></i> צור בעיה מתבנית
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- New Template Modal -->
+<div class="modal fade" id="newTemplateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">יצירת תבנית חדשה</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newTemplateForm">
+                    <div class="mb-3">
+                        <label class="form-label">שם התבנית</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">קטגוריה</label>
+                        <select class="form-control" name="category" required>
+                            <option value="כספים">כספים</option>
+                            <option value="בריאות">בריאות</option>
+                            <option value="משפחה">משפחה</option>
+                            <option value="קריירה">קריירה</option>
+                            <option value="אחר">אחר</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">תיאור</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ביטול</button>
+                <button type="button" class="btn btn-primary" onclick="saveTemplate()">שמור תבנית</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

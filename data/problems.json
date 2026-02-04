@@ -1,0 +1,159 @@
+{
+    "problems": [
+        {
+            "id": 1,
+            "title": "\u05e1\u05d9\u05d2\u05e8\u05d9\u05d5\u05ea",
+            "category": "\u05d1\u05e8\u05d9\u05d0\u05d5\u05ea",
+            "description": "\u05de\u05e2\u05e9\u05df \u05d1\u05dc\u05d9 \u05e1\u05d5\u05e3!",
+            "status": "open",
+            "created_date": "2024-12-20",
+            "due_date": "2024-12-31"
+        },
+        {
+            "id": 2,
+            "title": "\u05e1\u05d9\u05d2\u05e8\u05d9\u05d5\u05ea",
+            "category": "\u05d1\u05e8\u05d9\u05d0\u05d5\u05ea",
+            "description": "\u05d7\u05d9\u05d9\u05d1 \u05dc\u05d4\u05e4\u05e1\u05d9\u05e7 \u05dc\u05e2\u05e9\u05df!",
+            "status": "in_progress",
+            "created_date": "2024-12-20",
+            "due_date": "2024-12-31",
+            "tags": [
+                "\u05d3\u05d7\u05d5\u05e3!, \u05dc\u05d4\u05e4\u05e1\u05d9\u05e7 \u05dc\u05e2\u05e9\u05df"
+            ],
+            "history": [
+                {
+                    "date": "2024-12-20 06:53:10",
+                    "action": "created",
+                    "details": "\u05d1\u05e2\u05d9\u05d4 \u05e0\u05d5\u05e6\u05e8\u05d4"
+                },
+                {
+                    "date": "2024-12-20 06:56:58",
+                    "action": "subtask_added",
+                    "details": "\u05e0\u05d5\u05e1\u05e4\u05d4 \u05de\u05e9\u05d9\u05de\u05ea \u05de\u05e9\u05e0\u05d4: \u05dc\u05d4\u05e4\u05e1\u05d9\u05e7 \u05e2\u05db\u05e9\u05d9\u05d5"
+                },
+                {
+                    "date": "2024-12-20 07:02:37",
+                    "action": "solution_added",
+                    "details": "\u05e0\u05d5\u05e1\u05e3 \u05e4\u05ea\u05e8\u05d5\u05df \u05d7\u05d3\u05e9"
+                },
+                {
+                    "date": "2024-12-20 07:02:54",
+                    "action": "solution_implemented",
+                    "details": "\u05e4\u05ea\u05e8\u05d5\u05df 1 \u05d9\u05d5\u05e9\u05dd"
+                },
+                {
+                    "date": "2024-12-20 07:03:55",
+                    "action": "comment_added",
+                    "details": "\u05e0\u05d5\u05e1\u05e4\u05d4 \u05ea\u05d2\u05d5\u05d1\u05d4 \u05d7\u05d3\u05e9\u05d4"
+                },
+                {
+                    "date": "2024-12-20 07:07:17",
+                    "action": "status_changed",
+                    "details": "\u05e1\u05d8\u05d8\u05d5\u05e1 \u05e9\u05d5\u05e0\u05d4 \u05de-open \u05dc-in_progress"
+                },
+                {
+                    "date": "2024-12-20 07:07:19",
+                    "action": "status_changed",
+                    "details": "\u05e1\u05d8\u05d8\u05d5\u05e1 \u05e9\u05d5\u05e0\u05d4 \u05de-in_progress \u05dc-open"
+                },
+                {
+                    "date": "2024-12-20 07:07:29",
+                    "action": "status_changed",
+                    "details": "\u05e1\u05d8\u05d8\u05d5\u05e1 \u05e9\u05d5\u05e0\u05d4 \u05de-open \u05dc-in_progress"
+                },
+                {
+                    "date": "2024-12-20 07:07:30",
+                    "action": "status_changed",
+                    "details": "\u05e1\u05d8\u05d8\u05d5\u05e1 \u05e9\u05d5\u05e0\u05d4 \u05de-in_progress \u05dc-review"
+                },
+                {
+                    "date": "2024-12-20 07:10:21",
+                    "action": "status_changed",
+                    "details": "\u05e1\u05d8\u05d8\u05d5\u05e1 \u05e9\u05d5\u05e0\u05d4 \u05de-review \u05dc-in_progress"
+                }
+            ],
+            "subtasks": [
+                {
+                    "id": 1,
+                    "title": "\u05dc\u05d4\u05e4\u05e1\u05d9\u05e7 \u05e2\u05db\u05e9\u05d9\u05d5",
+                    "status": "pending",
+                    "created_date": "2024-12-20",
+                    "completed_date": null
+                }
+            ],
+            "solutions": [
+                {
+                    "id": 1,
+                    "description": "\u05dc\u05d0 \u05dc\u05e7\u05e0\u05d5\u05ea",
+                    "steps": [
+                        "\u05dc\u05d0 \u05dc\u05e6\u05d0\u05ea \u05d1\u05e9\u05d1\u05d9\u05dc \u05d6\u05d4"
+                    ],
+                    "created_date": "2024-12-20 07:02:37",
+                    "effectiveness": "100",
+                    "implemented": true,
+                    "implementation_date": "2024-12-20 07:02:54"
+                }
+            ],
+            "comments": [
+                {
+                    "id": 1,
+                    "text": "\u05d4\u05d9",
+                    "created_date": "2024-12-20 07:03:55",
+                    "user": "\u05d0\u05e0\u05d5\u05e0\u05d9\u05de\u05d9",
+                    "mentions": []
+                }
+            ],
+            "time_logs": [
+                {
+                    "id": 1,
+                    "minutes": 10,
+                    "description": "\u05e0\u05d5\u05e6\u05e8\u05d4 \u05d4\u05de\u05e2\u05e8\u05db\u05ea",
+                    "logged_date": "2024-12-20 07:04:11",
+                    "user": "\u05d0\u05e0\u05d5\u05e0\u05d9\u05de\u05d9"
+                }
+            ],
+            "total_time": 10
+        },
+        {
+            "id": 3,
+            "title": "\u05d7\u05d5\u05e1\u05e8 \u05e4\u05e2\u05d9\u05dc\u05d5\u05ea \u05d2\u05d5\u05e4\u05e0\u05d9\u05ea",
+            "category": "\u05d1\u05e8\u05d9\u05d0\u05d5\u05ea",
+            "description": "\u05dc\u05d4\u05ea\u05d7\u05d9\u05dc \u05dc\u05e2\u05e9\u05d5\u05ea \u05d9\u05d5\u05ea\u05e8 \u05d4\u05dc\u05d9\u05db\u05d5\u05ea \u05d5\u05e1\u05e4\u05d5\u05e8\u05d8",
+            "status": "in_progress",
+            "created_date": "2024-12-20",
+            "due_date": "2024-12-31",
+            "tags": [
+                "\u05e1\u05e4\u05d5\u05e8\u05d8"
+            ],
+            "history": [
+                {
+                    "date": "2024-12-20 06:59:12",
+                    "action": "created",
+                    "details": "\u05d1\u05e2\u05d9\u05d4 \u05e0\u05d5\u05e6\u05e8\u05d4"
+                },
+                {
+                    "date": "2024-12-20 07:07:34",
+                    "action": "status_changed",
+                    "details": "\u05e1\u05d8\u05d8\u05d5\u05e1 \u05e9\u05d5\u05e0\u05d4 \u05de-open \u05dc-in_progress"
+                },
+                {
+                    "date": "2024-12-20 07:21:16",
+                    "action": "solution_added",
+                    "details": "\u05e0\u05d5\u05e1\u05e3 \u05e4\u05ea\u05e8\u05d5\u05df \u05d7\u05d3\u05e9"
+                }
+            ],
+            "solutions": [
+                {
+                    "id": 1,
+                    "description": "\u05e9\u05ea\u05d5\u05e7",
+                    "steps": [
+                        "\u05e2\u05db\u05e9\u05d9\u05d5"
+                    ],
+                    "created_date": "2024-12-20 07:21:16",
+                    "effectiveness": "100",
+                    "implemented": false
+                }
+            ]
+        }
+    ]
+}

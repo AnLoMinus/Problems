@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Quick Actions Bar -->
+<div class="quick-actions mb-4">
+    <div class="row g-3">
+        <div class="col-auto">
+            <a href="/add_problem" class="btn btn-primary">
+                <i class="fas fa-plus"></i> בעיה חדשה
+            </a>
+        </div>
+        <div class="col-auto">
+            <div class="btn-group">
+                <a href="/kanban" class="btn btn-outline-primary">
+                    <i class="fas fa-columns"></i> תצוגת קנבן
+                </a>
+                <a href="/calendar" class="btn btn-outline-primary">
+                    <i class="fas fa-calendar-alt"></i> לוח שנה
+                </a>
+                <a href="/gantt" class="btn btn-outline-primary">
+                    <i class="fas fa-tasks"></i> גאנט
+                </a>
+            </div>
+        </div>
+        <div class="col-auto ms-auto">
+            <div class="btn-group">
+                <a href="/export/excel" class="btn btn-outline-success">
+                    <i class="fas fa-file-excel"></i> Excel
+                </a>
+                <a href="/export/pdf" class="btn btn-outline-danger">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stats-card">
+            <div class="stats-icon bg-primary">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <div class="stats-info">
+                <h3 id="totalProblems">-</h3>
+                <p>סה"כ בעיות</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card">
+            <div class="stats-icon bg-warning">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stats-info">
+                <h3 id="openProblems">-</h3>
+                <p>בעיות פתוחות</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card">
+            <div class="stats-icon bg-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="stats-info">
+                <h3 id="overdueProblems">-</h3>
+                <p>בעיות באיחור</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card">
+            <div class="stats-icon bg-success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stats-info">
+                <h3 id="solvedProblems">-</h3>
+                <p>בעיות שנפתרו</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search and Filters -->
+<div class="search-filters mb-4">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" id="searchInput" class="form-control" placeholder="חיפוש בעיות...">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <select id="categoryFilter" class="form-select">
+                <option value="all">כל הקטגוריות</option>
+                <option value="כספים">כספים</option>
+                <option value="בריאות">בריאות</option>
+                <option value="משפחה">משפחה</option>
+                <option value="קריירה">קריירה</option>
+                <option value="אחר">אחר</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select id="statusFilter" class="form-select">
+                <option value="all">כל הסטטוסים</option>
+                <option value="open">פתוח</option>
+                <option value="in_progress">בטיפול</option>
+                <option value="review">בבדיקה</option>
+                <option value="closed">סגור</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select id="sortFilter" class="form-select">
+                <option value="date_desc">חדש לישן</option>
+                <option value="date_asc">ישן לחדש</option>
+                <option value="priority">עדיפות</option>
+                <option value="due_date">תאריך יעד</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Notifications Area -->
+<div id="notificationsArea" class="notifications-area mb-4" style="display: none;">
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="notifications-content">
+            <!-- Notifications will be inserted here dynamically -->
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+</div>
+
+<!-- Problems Grid -->
+<div id="problemsGrid" class="problems-grid">
+    {% for problem in problems %}
+    <div class="card problem-card">
+        <div class="card-header d-flex justify-content-between align-items-center status-{{ problem.status }}">
+            <span class="badge bg-{{ 'success' if problem.status == 'closed' else 
+                'info' if problem.status == 'in_progress' else 
+                'primary' if problem.status == 'review' else 
+                'warning' }}">
+                {{ problem.status }}
+            </span>
+            <div class="dropdown">
+                <button class="btn btn-link" type="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" href="/edit_problem/{{ problem.id }}">
+                            <i class="fas fa-edit"></i> עריכה
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-danger delete-problem" href="#" data-id="{{ problem.id }}">
+                            <i class="fas fa-trash"></i> מחיקה
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ problem.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+                <i class="fas fa-folder"></i> {{ problem.category }}
+            </h6>
+            <p class="card-text">{{ problem.description }}</p>
+
+            <!-- Tabs for different sections -->
+            <ul class="nav nav-tabs mt-3" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#subtasks-{{ problem.id }}">
+                        <i class="fas fa-tasks"></i> משימות
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#time-{{ problem.id }}">
+                        <i class="fas fa-clock"></i> זמנים
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#solutions-{{ problem.id }}">
+                        <i class="fas fa-lightbulb"></i> פתרונות
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content mt-3">
+                <!-- Subtasks Tab -->
+                <div class="tab-pane fade show active" id="subtasks-{{ problem.id }}">
+                    <div class="subtasks-list">
+                        {% if problem.subtasks %}
+                        {% for subtask in problem.subtasks %}
+                        <div class="subtask-item d-flex align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input toggle-subtask" type="checkbox" {{ 'checked' if
+                                    subtask.status=='completed' }} data-problem-id="{{ problem.id }}"
+                                    data-subtask-id="{{ subtask.id }}">
+                                <span
+                                    class="{{ 'text-muted text-decoration-line-through' if subtask.status == 'completed' }}">
+                                    {{ subtask.title }}
+                                </span>
+                            </div>
+                            {% if subtask.status == 'completed' %}
+                            <small class="text-muted ms-auto">
+                                הושלם ב-{{ subtask.completed_date }}
+                            </small>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-muted">אין משימות משנה</p>
+                        {% endif %}
+                        <button class="btn btn-sm btn-outline-primary mt-2 add-subtask"
+                            data-problem-id="{{ problem.id }}">
+                            <i class="fas fa-plus"></i> הוסף משימה
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Time Tracking Tab -->
+                <div class="tab-pane fade" id="time-{{ problem.id }}">
+                    <div class="time-tracking">
+                        <div class="total-time mb-2">
+                            <strong>סה"כ זמן:</strong> {{ problem.total_time|default(0) }} דקות
+                        </div>
+                        {% if problem.time_logs %}
+                        <div class="time-logs-list">
+                            {% for log in problem.time_logs|reverse %}
+                            <div class="time-log-item">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ log.minutes }} דקות</span>
+                                    <small class="text-muted">{{ log.logged_date }}</small>
+                                </div>
+                                <div class="text-muted">{{ log.description }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <button class="btn btn-sm btn-outline-info mt-2 log-time" data-problem-id="{{ problem.id }}">
+                            <i class="fas fa-plus"></i> הוסף זמן
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Solutions Tab -->
+                <div class="tab-pane fade" id="solutions-{{ problem.id }}">
+                    <div class="solutions-list">
+                        {% if problem.solutions %}
+                        {% for solution in problem.solutions %}
+                        <div class="solution-item">
+                            <div class="solution-header">
+                                <strong>פתרון #{{ solution.id }}</strong>
+                                <small class="text-muted">{{ solution.created_date }}</small>
+                            </div>
+                            <div class="solution-body">
+                                <p>{{ solution.description }}</p>
+                                {% if solution.steps %}
+                                <div class="solution-steps">
+                                    <strong>שלבי ביצוע:</strong>
+                                    <ol>
+                                        {% for step in solution.steps %}
+                                        <li>{{ step }}</li>
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                                {% endif %}
+                                {% if solution.effectiveness %}
+                                <div class="solution-effectiveness">
+                                    <strong>אפקטיביות:</strong>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar"
+                                            style="width: {{ solution.effectiveness }}%">
+                                            {{ solution.effectiveness }}%
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% if not solution.implemented %}
+                            <button class="btn btn-sm btn-outline-success mt-2 implement-solution"
+                                data-problem-id="{{ problem.id }}" data-solution-id="{{ solution.id }}">
+                                <i class="fas fa-check"></i> יישם פתרון
+                            </button>
+                            {% else %}
+                            <div class="implemented-badge mt-2">
+                                <i class="fas fa-check-circle text-success"></i>
+                                יושם בתאריך {{ solution.implementation_date }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-muted">אין פתרונות</p>
+                        {% endif %}
+                        <button class="btn btn-sm btn-outline-primary mt-2 add-solution"
+                            data-problem-id="{{ problem.id }}">
+                            <i class="fas fa-plus"></i> הוסף פתרון
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="tags mt-3">
+                {% for tag in problem.tags %}
+                <span class="badge bg-info me-1">{{ tag }}</span>
+                {% endfor %}
+            </div>
+
+            <!-- Meta Info -->
+            <div class="meta-info mt-3">
+                <div class="row">
+                    <div class="col-6">
+                        <small class="text-muted">
+                            <i class="far fa-calendar"></i> יעד: {{ problem.due_date }}
+                        </small>
+                    </div>
+                    <div class="col-6 text-end">
+                        <small class="text-muted">
+                            <i class="far fa-clock"></i> נוצר: {{ problem.created_date }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

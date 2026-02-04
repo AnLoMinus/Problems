@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="reminders-container">
+    <h2 class="mb-4">תזכורות</h2>
+
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Active Reminders -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">תזכורות פעילות</h5>
+                </div>
+                <div class="card-body">
+                    {% if reminders %}
+                    <div class="reminders-list">
+                        {% for reminder in reminders|sort(attribute='days_left') %}
+                        <div class="reminder-item p-3 mb-2 rounded
+                                    {% if reminder.days_left <= 1 %}bg-danger text-white
+                                    {% elif reminder.days_left <= 3 %}bg-warning
+                                    {% else %}bg-light{% endif %}">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ reminder.title }}</h6>
+                                    <div class="reminder-details">
+                                        <span class="me-3">
+                                            <i class="fas fa-calendar"></i>
+                                            {{ reminder.due_date }}
+                                        </span>
+                                        <span class="me-3">
+                                            <i class="fas fa-folder"></i>
+                                            {{ reminder.category }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="days-left-counter">
+                                        {{ reminder.days_left }}
+                                    </div>
+                                    <small>ימים נותרו</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center my-4">אין תזכורות פעילות</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Reminder Settings -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">הגדרות תזכורות</h5>
+                </div>
+                <div class="card-body">
+                    <form id="reminderSettingsForm">
+                        <div class="mb-3">
+                            <label class="form-label">ימים לפני תאריך היעד</label>
+                            <select class="form-select" multiple>
+                                <option value="1">יום אחד</option>
+                                <option value="3" selected>3 ימים</option>
+                                <option value="7" selected>שבוע</option>
+                                <option value="14">שבועיים</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">סוג התראה</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                <label class="form-check-label">התראות דפדפן</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                <label class="form-check-label">התראות מערכת</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">שמור הגדרות</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

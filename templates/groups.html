@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="groups-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>קבוצות</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newGroupModal">
+            <i class="fas fa-plus"></i> קבוצה חדשה
+        </button>
+    </div>
+
+    <div class="row">
+        {% for group in groups %}
+        <div class="col-md-4 mb-4">
+            <div class="card group-card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ group.name }}</h5>
+                    <p class="card-text">{{ group.description }}</p>
+
+                    <div class="group-members mb-3">
+                        <strong>חברי קבוצה:</strong>
+                        <div class="members-list">
+                            {% for member in group.members %}
+                            <span class="badge bg-light text-dark">{{ member }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="group-stats">
+                        <div class="row text-center">
+                            <div class="col">
+                                <h6>בעיות פתוחות</h6>
+                                <span class="h4">{{ group.open_problems|default(0) }}</span>
+                            </div>
+                            <div class="col">
+                                <h6>בעיות שנפתרו</h6>
+                                <span class="h4">{{ group.solved_problems|default(0) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-sm btn-outline-primary invite-member" data-group-id="{{ group.id }}">
+                        <i class="fas fa-user-plus"></i> הזמן חבר
+                    </button>
+                    {% if session.user_id == group.creator_id %}
+                    <button class="btn btn-sm btn-outline-danger float-end delete-group" data-group-id="{{ group.id }}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- New Group Modal -->
+<div class="modal fade" id="newGroupModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">יצירת קבוצה חדשה</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newGroupForm">
+                    <div class="mb-3">
+                        <label class="form-label">שם הקבוצה</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">תיאור</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ביטול</button>
+                <button type="button" class="btn btn-primary" onclick="createGroup()">צור קבוצה</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

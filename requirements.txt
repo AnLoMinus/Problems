@@ -1,0 +1,12 @@
+Flask
+schedule
+pandas
+xlsxwriter
+WeasyPrint
+pytz
+PyJWT
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Login
+Flask-WTF
+flasgger

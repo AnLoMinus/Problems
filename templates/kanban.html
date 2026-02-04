@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="kanban-container">
+    <div class="kanban-column" data-status="open">
+        <div class="kanban-header bg-warning">
+            <h5>פתוח</h5>
+            <span class="badge bg-light text-dark">{{ columns.open|length }}</span>
+        </div>
+        <div class="kanban-items" id="open-items">
+            {% for problem in columns.open %}
+            <div class="card kanban-item" draggable="true" data-problem-id="{{ problem.id }}">
+                <div class="card-body">
+                    <h6 class="card-title">{{ problem.title }}</h6>
+                    <div class="card-subtitle mb-2 text-muted">{{ problem.category }}</div>
+                    <small class="text-muted">תאריך יעד: {{ problem.due_date }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="kanban-column" data-status="in_progress">
+        <div class="kanban-header bg-info">
+            <h5>בטיפול</h5>
+            <span class="badge bg-light text-dark">{{ columns.in_progress|length }}</span>
+        </div>
+        <div class="kanban-items" id="in_progress-items">
+            {% for problem in columns.in_progress %}
+            <div class="card kanban-item" draggable="true" data-problem-id="{{ problem.id }}">
+                <div class="card-body">
+                    <h6 class="card-title">{{ problem.title }}</h6>
+                    <div class="card-subtitle mb-2 text-muted">{{ problem.category }}</div>
+                    <small class="text-muted">תאריך יעד: {{ problem.due_date }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="kanban-column" data-status="review">
+        <div class="kanban-header bg-primary">
+            <h5>בבדיקה</h5>
+            <span class="badge bg-light text-dark">{{ columns.review|length }}</span>
+        </div>
+        <div class="kanban-items" id="review-items">
+            {% for problem in columns.review %}
+            <div class="card kanban-item" draggable="true" data-problem-id="{{ problem.id }}">
+                <div class="card-body">
+                    <h6 class="card-title">{{ problem.title }}</h6>
+                    <div class="card-subtitle mb-2 text-muted">{{ problem.category }}</div>
+                    <small class="text-muted">תאריך יעד: {{ problem.due_date }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="kanban-column" data-status="closed">
+        <div class="kanban-header bg-success">
+            <h5>סגור</h5>
+            <span class="badge bg-light text-dark">{{ columns.closed|length }}</span>
+        </div>
+        <div class="kanban-items" id="closed-items">
+            {% for problem in columns.closed %}
+            <div class="card kanban-item" draggable="true" data-problem-id="{{ problem.id }}">
+                <div class="card-body">
+                    <h6 class="card-title">{{ problem.title }}</h6>
+                    <div class="card-subtitle mb-2 text-muted">{{ problem.category }}</div>
+                    <small class="text-muted">תאריך יעד: {{ problem.due_date }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="activity-log-container">
+    <h2>יומן פעילות</h2>
+
+    <div class="activity-filters mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" id="activitySearch" class="form-control" placeholder="חיפוש פעילות...">
+            </div>
+            <div class="col-md-4">
+                <select id="actionFilter" class="form-control">
+                    <option value="">כל הפעולות</option>
+                    <option value="created">יצירה</option>
+                    <option value="edited">עריכה</option>
+                    <option value="status_changed">שינוי סטטוס</option>
+                    <option value="comment_added">תגובה חדשה</option>
+                    <option value="solution_added">פתרון חדש</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="activity-timeline">
+        {% for activity in activities %}
+        <div class="activity-item" data-action="{{ activity.action }}">
+            <div class="activity-time">
+                <i class="fas fa-clock"></i>
+                {{ activity.date }}
+            </div>
+            <div class="activity-content">
+                <div class="activity-header">
+                    <strong>{{ activity.problem_title }}</strong>
+                    <span class="badge bg-secondary">{{ activity.action }}</span>
+                </div>
+                <div class="activity-details">
+                    {{ activity.details }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const activitySearch = document.getElementById('activitySearch');
+        const actionFilter = document.getElementById('actionFilter');
+        const activities = document.querySelectorAll('.activity-item');
+
+        function filterActivities() {
+            const searchTerm = activitySearch.value.toLowerCase();
+            const actionType = actionFilter.value;
+
+            activities.forEach(activity => {
+                const content = activity.textContent.toLowerCase();
+                const action = activity.dataset.action;
+
+                const matchesSearch = searchTerm === '' || content.includes(searchTerm);
+                const matchesAction = actionType === '' || action === actionType;
+
+                activity.style.display = matchesSearch && matchesAction ? 'flex' : 'none';
+            });
+        }
+
+        activitySearch.addEventListener('input', filterActivities);
+        actionFilter.addEventListener('change', filterActivities);
+    });
+</script>
+{% endblock %}

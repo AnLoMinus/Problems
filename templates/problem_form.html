@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2>הוספת בעיה חדשה</h2>
+        <form id="problemForm" method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">כותרת</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">קטגוריה</label>
+                <select class="form-control" id="category" name="category" required>
+                    <option value="כספים">כספים</option>
+                    <option value="בריאות">בריאות</option>
+                    <option value="משפחה">משפחה</option>
+                    <option value="קריירה">קריירה</option>
+                    <option value="אחר">אחר</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">תיאור</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="due_date" class="form-label">תאריך יעד</label>
+                <input type="date" class="form-control" id="due_date" name="due_date" required>
+            </div>
+            <div class="mb-3">
+                <label for="tags" class="form-label">תגים</label>
+                <input type="text" class="form-control" id="tags" name="tags" placeholder="הפרד תגים בפסיקים"
+                    value="{{ ','.join(problem.tags) if problem and problem.tags else '' }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">הגדרות פרטיות</label>
+                <select class="form-control" name="visibility" required>
+                    <option value="private">פרטי</option>
+                    <option value="group">קבוצתי</option>
+                    <option value="public">ציבורי</option>
+                </select>
+            </div>
+            <div class="mb-3 group-select" style="display: none;">
+                <label class="form-label">קבוצה</label>
+                <select class="form-control" name="group_id">
+                    <option value="">בחר קבוצה...</option>
+                    {% for group in groups %}
+                    <option value="{{ group.id }}">{{ group.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">הוסף בעיה</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

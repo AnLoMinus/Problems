@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="reports-container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>דוחות וניתוח נתונים</h2>
+        </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="metric-card">
+                <h3>{{ metrics.total_problems }}</h3>
+                <p>סה"כ בעיות</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <h3>{{ "%.1f"|format(metrics.avg_resolution_time) }}</h3>
+                <p>ממוצע ימי טיפול</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <h3>{{ "%.1f%%"|format(metrics.completion_rate) }}</h3>
+                <p>אחוז השלמה</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <h3>{{ "%.1f%%"|format(metrics.overdue_percentage) }}</h3>
+                <p>אחוז באיחור</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="chart-card">
+                <h4>התפלגות לפי קטגוריות</h4>
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-card">
+                <h4>מגמות חודשיות</h4>
+                <canvas id="trendsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="chart-card">
+                <h4>שימוש בתגיות</h4>
+                <canvas id="tagsChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-card">
+                <h4>אפקטיביות פתרונות</h4>
+                <canvas id="solutionsChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Category Distribution Chart
+    new Chart(document.getElementById('categoryChart'), {
+        type: 'pie',
+        data: {
+            labels: {{ metrics.category_distribution.keys() | list | tojson }},
+        datasets: [{
+            data: {{ metrics.category_distribution.values() | list | tojson }},
+        backgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#4BC0C0',
+            '#9966FF'
+        ]
+            }]
+        }
+    });
+
+    // Monthly Trends Chart
+    new Chart(document.getElementById('trendsChart'), {
+        type: 'line',
+        data: {
+            labels: {{ metrics.monthly_trends.keys() | list | tojson }},
+        datasets: [{
+            label: 'בעיות חדשות',
+            data: {{ metrics.monthly_trends.values() | list | tojson }},
+        borderColor: '#36A2EB',
+        tension: 0.1
+            }]
+        }
+    });
+
+    // Tags Usage Chart
+    new Chart(document.getElementById('tagsChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ metrics.tag_usage.keys() | list | tojson }},
+        datasets: [{
+            label: 'שימוש בתגיות',
+            data: {{ metrics.tag_usage.values() | list | tojson }},
+        backgroundColor: '#4BC0C0'
+            }]
+        }
+    });
+
+    // Solutions Effectiveness Chart
+    new Chart(document.getElementById('solutionsChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ metrics.solution_effectiveness.keys() | list | tojson }},
+        datasets: [{
+            label: 'אפקטיביות פתרונות (%)',
+            data: {{ metrics.solution_effectiveness.values() | list | tojson }},
+        backgroundColor: '#FFCE56'
+            }]
+        },
+        options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100
+            }
+        }
+    }
+    });
+</script>
+{% endblock %}

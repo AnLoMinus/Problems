@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="gantt-controls mb-3">
+    <div class="btn-group">
+        <button class="btn btn-outline-primary" onclick="zoomIn()">
+            <i class="fas fa-search-plus"></i> הגדל
+        </button>
+        <button class="btn btn-outline-primary" onclick="zoomOut()">
+            <i class="fas fa-search-minus"></i> הקטן
+        </button>
+        <button class="btn btn-outline-secondary" onclick="toggleCriticalPath()">
+            <i class="fas fa-route"></i> נתיב קריטי
+        </button>
+    </div>
+</div>
+
+<div class="gantt-container">
+    <div id="gantt-chart"></div>
+</div>
+
+<!-- Add dhtmlx Gantt -->
+<script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>
+<link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
+
+<script>
+    gantt.plugins({
+        zoom: true,
+        critical_path: true
+    });
+
+    gantt.config.date_format = "%Y-%m-%d";
+    gantt.config.scale_unit = "day";
+    gantt.config.duration_unit = "day";
+    gantt.config.row_height = 30;
+    gantt.config.min_column_width = 40;
+    gantt.config.fit_tasks = true;
+    gantt.config.rtl = true;  // Enable RTL support
+
+    // Enable critical path calculation
+    gantt.config.highlight_critical_path = true;
+
+    // Custom task coloring based on status
+    gantt.templates.task_class = function (start, end, task) {
+        switch (task.status) {
+            case 'closed': return 'task-completed';
+            case 'in_progress': return 'task-progress';
+            case 'review': return 'task-review';
+            default: return 'task-open';
+        }
+    };
+
+    // Add progress and other details to task tooltip
+    gantt.templates.tooltip_text = function (start, end, task) {
+        return `<b>${task.text}</b><br>
+                קטגוריה: ${task.category}<br>
+                סטטוס: ${task.status}<br>
+                התחלה: ${gantt.templates.tooltip_date_format(start)}<br>
+                סיום: ${gantt.templates.tooltip_date_format(end)}`;
+    };
+
+    const tasks = {
+        data: [
+            {% for problem in problems %}
+    {
+        id: { { problem.id } },
+        text: "{{ problem.title }}",
+            start_date: "{{ problem.created_date }}",
+                end_date: "{{ problem.due_date }}",
+                    progress: { { '1' if problem.status == 'closed' else '0.5' if problem.status == 'in_progress' else '0' } },
+        category: "{{ problem.category }}",
+            status: "{{ problem.status }}"
+    } {% if not loop.last %}, {% endif %}
+    {% endfor %}
+        ]
+    };
+
+    gantt.init("gantt-chart");
+    gantt.parse(tasks);
+
+    // Zoom functions
+    const zoomConfig = {
+        levels: [
+            {
+                name: "day",
+                scale_height: 27,
+                min_column_width: 80,
+                scales: [
+                    { unit: "day", step: 1, format: "%d %M" }
+                ]
+            },
+            {
+                name: "week",
+                scale_height: 27,
+                min_column_width: 50,
+                scales: [
+                    { unit: "week", step: 1, format: "שבוע %W" }
+                ]
+            },
+            {
+                name: "month",
+                scale_height: 27,
+                min_column_width: 120,
+                scales: [
+                    { unit: "month", format: "%F %Y" }
+                ]
+            }
+        ]
+    };
+
+    gantt.ext.zoom.init(zoomConfig);
+    let currentZoom = 1;
+
+    function zoomIn() {
+        if (currentZoom < zoomConfig.levels.length - 1) {
+            currentZoom++;
+            gantt.ext.zoom.setLevel(currentZoom);
+        }
+    }
+
+    function zoomOut() {
+        if (currentZoom > 0) {
+            currentZoom--;
+            gantt.ext.zoom.setLevel(currentZoom);
+        }
+    }
+
+    // Toggle critical path
+    function toggleCriticalPath() {
+        gantt.config.highlight_critical_path = !gantt.config.highlight_critical_path;
+        gantt.render();
+    }
+</script>
+
+<style>
+    .task-completed {
+        background-color: #198754;
+    }
+
+    .task-progress {
+        background-color: #0dcaf0;
+    }
+
+    .task-review {
+        background-color: #0d6efd;
+    }
+
+    .task-open {
+        background-color: #ffc107;
+    }
+
+    .gantt_task_progress {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+</style>
+{% endblock %}

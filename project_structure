@@ -1,0 +1,14 @@
+life-problems-manager/
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── main.js
+├── templates/
+│   ├── base.html
+│   ├── dashboard.html
+│   └── problem_form.html
+├── data/
+│   └── problems.json
+├── app.py
+└── requirements.txt 
